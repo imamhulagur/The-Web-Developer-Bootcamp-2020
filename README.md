@@ -23,9 +23,9 @@ https://www.notion.so/Web-Developer-Bootcamp-ChangeLog-45e3eab6be724c5f9a4b83c01
     starts with & and ends with ;
     using entity codes[https://dev.w3.org/html5/html-author/charref]
 
-- semantic marksup
-    instead of keeping all as DIV, use specilized tags
-    If others are redenring through code its should to feasible(like which is nav, section, article, footer, header)
+- semantic markups
+    instead of keeping all as DIV, use specialized tags
+    If others are rendering through code its should to feasible(like which is nav, section, article, footer, header)
     they dont give extra features, same as div but helps in understanding code while rendered by other person.
     ex <main> <section> <article>
 
