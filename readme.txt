@@ -348,6 +348,274 @@ Function expressions / returning function as a variable
         return x+y;
     }
 
+Higher Order function - function that work with other functions
+    Accept a function as argument
+    function callTwice(func) {
+        func();
+        func();
+    }
+
+    function diceRoll() {
+        return math.floor((math.radom()*6)+1);
+    }
+
+    callTwice(diceRol());
+
+    Returning function
+
+    function surpriseFunction(){
+        let randNum = (math.floor(math.random())); //its will return value between 0 and 1
+        if(randNum > 0.5) {
+            return function(){
+                console.log("happy");
+            }
+        }
+        else {
+            return function(){
+                console.log("sad");
+            }
+        }
+    }
+
+
+JS methods
+    methods  = functions as properties on objects
+    ex:
+    let myInfo = {
+        FirstName : function() {
+            return "imam";
+        }
+        LastName : function() {
+            return "hulagur";
+        }
+    };
+    accessing FirstName-> myInfo.FistName()
+    Here myInfo is method variable, FirstName and LastName as functions as properties
+    *Every method is function, but not vice versa.
+
+    Now we can write as below also to avoid confusion(Remove function keyword, by default it wil take it as function only )
+    
+    Better way 
+    let myInfo = {
+        FirstName() {
+            return "imam";
+        }
+        LastName() {
+            return "hulagur";
+        }
+    };
+    ex: 
+    let square = {
+        area(side) {
+            return side*side;
+        },
+        perimeter(side) {
+            return side*4;
+        }
+    };
+JS this keyword in method
+    The value of this id depends on the context where is user/invoked.
+    let myInfo = {
+        firstName: "imam",
+        lastName:"hulagur",
+        info() {
+            //console.log("THIS IS:", this); pointing to window object
+            console.log("Hey my first name is:" + this.firstName);
+        }
+    };
+    case 1: 
+    myInfo.info(); //you will get correct o/p since this is represent the object myInfo which used left side access it.
+    case :2 if you male copy of that function to other variable, try to call it. 
+    It will give an error, because that 'this' is pointing to 'window object in which its doesnt contains firstname property.
+    let iInfo = myInfo.info; // undefined. we can test by just printing that 'this' keyword into the console
+
+Try/Catch
+    To avoid breaking of code
+    try{
+        //somtehing
+    } catch(e){
+        //something
+    }
+
+Callback and Array methods
+1.forEach()
+    older way
+        let nums = [1,2,3,4,5,6,7,8,9];
+        function print(num) {
+            console.log(num); 
+        }
+        nums.forEach(print);
+
+    modern way - anonymous function callbacks
+        let nums = [1,2,3,4,5,6,7,8,9];
+        nums.forEach(function(num){
+            console.log(num);
+        })
+2.Map - creates new array with a result of calling callback function on every element in the array
+    - extracting another array with require only data from array.
+    let imams=['imam1','imam2','imam3','imam4','imam5'];
+    let capsImams = imams.map(function(el){
+        console.log(el.toUpperCase());
+    });
+    o/p : new array ->capsImams['IMAM1','IMAM2','IMAM3','IMAM4','IMAM5']
+
+3.Arrow functions/fat arrow/'=>'
+    syntactically compact function expression
+        let add = function(x,y){
+
+        }
+        let add = (x,y)=> {
+
+        }
+    ex
+        let greet = (el)=>{
+            return `Hey ${el}!`;
+        };
+        greet('imam'); //o/p -> Hey imam!
+
+    If there is only one expression can be evaluated
+    *Implicit return - just remove those function curly braces i.e {} and also 'return' and ';' !!!
+        let greet = (el)=>(
+            `Hey ${el}!`
+        );
+    //regular function expression
+    const isEven = function(num) {
+        return num%2 === 0;
+    }
+    //arrow function with round brackets
+    const isEven = (num) => {
+        return num%2 === 0;
+    }
+    //arrow function without round brackets
+    const isEven = num => {
+        return num%2 === 0;
+    }
+    //Implicit arrow function without round brackets
+    const isEven = num => num%2 === 0;
+4.setTimeout() and setInterval() functions
+    setTimeout:
+    console.log('Hello..')
+    setTimeout(()=>{
+        console.log("Are you there");
+    }, 3000)            //3000 ms, hence first God bye will print
+    console.log('Good bye');
+
+    setInterval and clearInterval(id)
+    clearId  = setInterval(()=>{
+        console.log("i will come again after 3 sec");
+    }, 3000) 
+    clearInterval(id);
+
+5.filter method -creates a new array with all the elements that passes the test provided by the implemented function
+    let nums = [1,2,3,4,5,6,7,8,9];
+    let odd = nums.filter((el)=>{
+                    return el%2 !== 0; //here the implemented function return true if number is odd
+                })
+    let even = nums.filter((el)=>{
+                    return el%2 === 0; //here the implemented function return true if number is even
+                })
+    
+6.some() function - its return boolean true value if condition passed
+    let colors = ['red','green','blue'];
+    colors.some((el)=>{
+        return el.length <= 3;
+    });
+
+7.every() function - returns boolean true only if each and every elements of array satisfies the condition
+    let colors = ['red','green','blue'];
+    colors.every((el)=>{
+        return el.length <= 3;
+    });
+
+ex: some and every function
+    let allEvens = [2,4,6,8];
+    allEvens.every((el)=>{
+        return el%2 === 0;
+    });
+    true
+    let allEvens = [2,4,6,8];
+    allEvens.some((el)=>{
+        return el%2 === 0;
+    });
+    true
+    let allEvens = [1,2,4,6,8];
+    allEvens.some((el)=>{
+        return el%2 === 0;
+    });
+    true
+    let allEvens = [1,2,4,6,8];
+    allEvens.every((el)=>{
+        return el%2 === 0;
+    });
+    false
+
+8.reduce - execute a regular function on each element of a array, resulting in a single.
+    -helps to find a single value i.e total, min, max in array elements
+    -second argument to reduce(1st, 2nd) will be the initializer
+    ex : 
+    To find total
+        let prices = [10, 5, 20.5, 35];
+        prices.reduce((total, curPrice){
+            return total + curPrice;
+        })
+    To find max and min values
+        let prices = [10, 5, 20.5, 35];
+        let max= prices.reduce((highest, curPrice)=>{
+            if(highest > curPrice) return highest;
+            else return curPrice;
+        });
+        o/p
+        max
+        35
+
+        let prices = [10, 5, 20.5, 35];
+        let max= prices.reduce((highest, curPrice)=>{
+            if(highest < curPrice) return highest;
+            else return curPrice;
+        });
+        o/p
+        main
+        5
+Arrow function and this keyword
+    *in a traditional function definition 'this' keyword always point to 'object' hence we can easily access properties of that function.
+    let person = {
+        firstName : 'imam',
+        lastName : 'hulagur',
+        fullName: function(){
+            console.log(this);
+            console.log(`My name is: ${this.firstName} ${this.lastName}`);
+        }
+    };
+     o/p : My name is: imam hulagur
+
+    *in a arrow function definition 'this' keyword always point to 'window' hence accessing properties of that object give us an error.
+
+    let person = {
+        firstName : 'imam',
+        lastName : 'hulagur',
+        fullName: ()=>{
+            console.log(this);
+            console.log(`My name is: ${this.firstName} ${this.lastName}`);
+        }
+    };
+    o/p : My name is: undefined undefined
+
+    *imp If the arrow function defined inside tradition function, the i will not an error
+    let person = {
+        firstName : 'imam',
+        lastName : 'hulagur',
+        fullName: function(){
+            setTimeout(()=>{
+                console.log(this);
+                console.log(`My name is: ${this.firstName} ${this.lastName}`);
+            }, 3000)
+        }
+    };
+    o/p : after 3 sec -> My name is: imam hulagur
+
+    Note : its always better to use arrow functions inside traditional function methods.
+
+New features of JS
 
 
 
