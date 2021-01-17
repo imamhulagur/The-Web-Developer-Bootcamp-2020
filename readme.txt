@@ -616,6 +616,94 @@ Arrow function and this keyword
     Note : its always better to use arrow functions inside traditional function methods.
 
 New features of JS
+    1.default parameters
+        -its an parameter where the optional parameter value would be initialized
+        -the parameter should be initialized at the end
+        ex: without default params
+            function greetPerson(greeting, personName){
+                console.log(`Hey ${personName} ${greeting}!`);
+            }
+            greetPerson("morning", "imam") 
+            o/p  Hey imam morning
+        ex: with default params - *the default param should be placed in the end, if placed before you will get undefined.
+            function greetPerson(personName, greeting="Nice to meet you!"){
+                console.log(`Hey ${personName}, ${greeting}`);
+            }
+            greetPerson("imam") 
+        o/p  Hey imam, Nice to meet you!
+
+    2.spread function[In java its var-arg method]
+        -Its will take zero or more arguments(functions)/key-values pairs(objects)
+        -it will spread the array into its individual arguments which are separated by spaces
+        -spread in function calls
+        ex: console.log('hello'); // hello
+            console.log(...'hello'); // h e l l o
+            let nums = [1,2,3,4,5,6,7,8,9];
+            Math.max(...nums); //9
+        -spread with array literals - copy one array to another
+            let nums = [1,2,3,4,5,6,7,8,9];
+            Math.min(...nums); //1
+            -spread in array literals
+            let cats = ['cat1', 'cat2'];
+            let dogs = ['dog1', 'dog2', 'dog3'];
+            let allPets = [...cats, ...dogs, 'newcat'];
+            //cat1 cate2 dog1 dog2 dog3 newcat
+
+        -spread with object literals - copy one object into other
+            let user = {
+                firstName : "imam",
+                lastName : "hulagur"
+            }
+            let newUser = {...user, id:12}//retain old user info and add an additional fields
+            let newUser = {
+                firstName : "imam",
+                lastName: "hulagur",
+                id=12
+            }
+        -REST function (...)  - its not spreading things out its collecting thing in
+            function sums(..nums){
+                console.log(nums);
+            }
+            i/p - sum(1,2,3) -> 1,2 3
+            sum(1,2) - >1,2
+
+    3.destructuring arrays - unpacking array elements in variable cleanly
+        let nums = [1,2,3,4,5,6,7,8,9];
+        let [one, two] = nums;//we are not changing nums array, but we creating new variables one and two which holds respective values.
+        o/p 
+        nums
+        (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        one
+        1
+        two
+        2
+    destructuring objects - unpacking objects elements in variable cleanly
+        let person = {
+            firstName:"imam",
+            lastName:"hulagur"
+            age:24
+        }
+    //if i just want firstName and lastName variable from the object person
+        let {firstName, lastName } = person;
+        o/p 
+        person
+        {firstName: "imam", lastName: "hulagur", age: 24}
+        firstName
+        "imam"
+        lastName
+        "hulagur"
+    //if i just want override the properties of the origin name object
+        let {firstName: first, lastName:last } = person;
+
+    Destructuring params
+
+    let function fullName() {
+        lets{firstName, lastName} = person;
+        console.log(`${fisrName} ${lastName}`);
+    }
+
+DOM World
+
 
 
 
