@@ -699,13 +699,350 @@ New features of JS
 
     let function fullName() {
         lets{firstName, lastName} = person;
-        console.log(`${fisrName} ${lastName}`);
+        console.log(`${firstName} ${lastName}`);
     }
 
-DOM World
+DOM World - Document Object Model
+    -The JS representation of a webpage
+    -its makes bunch of object to interact each other via JS
+    -it combines HTML CSS JS
+    -HTML, CSS Go in... JS object come out..
+    selection
+        window,document, console.dir('element');
+        document.getElementById('#el');
+        document.getElementsByTagName('.el'); document.getElementsByClassName('el'); - return HTML collections
+    *we can replace above tags using below queryselector tags
+        querySelector('#el') or querySelector('.el') or querySelector('el[some=something]')- >only return the first matching element
+        querySelectorAll('#el') or querySelectorAll('.el') or querySelectorAll('el[some=something]')- >return Node List
+        querySelectorAll('el')
+    
+    Updating content
+    -innerText - print content without retaining spaces
+        shows content at the moment i.e if display none i will not show that content.
+    -textContent - retains format with spaces
+        irrespective of Display prop i ll show everything.
+    -innerHTML -  we can set content using HTML script, i will sanitize the script and provide content. 
 
+    Important properties
+        innerText
+        textContent
+        innerHTML
+        value
+        parentElement
+        children
+        nextSibling
+        previousSibling
+        style -> wiered thing is that style object doesnt consists of applies style, its empty.
+            it ony track internal styling.
+            imp* the property values of style object doesnt contains hyphen(-) i.e instead it cotain in camelCase
+                ex : font-size - >you can find using fortSize
+                    document.getElementsByTagName('h1').style.fontColor = "green"
 
+    Important methods
+        classList
+        getAttribute()
+        setAttribute()
+        appendChilde()
+        append()
+        prepend()
+        removeChild()
+        remove()
+        createElement
+    classList - to apply multiple styles a time
+    methods - add(), remove(), toggle(), contains()
+    ex : let h1 = document.getElementsByTagName('h1');
+          h1.classList.add('purple');
+          h1.classList.add('border');
+    ex: document.querySelectorAll('li');
+        let lis = document.querySelectorAll('li');
+        for(let li of lis){
+            li.classList.toggle('highlight');
+            }
 
+    Traversing
+    To parent element
+        cur = document.querySelector('el');
+        cur.parentElement;
+    To child 
+        cur.children[i];
+    To directly access prev or next ele/nodes
+        cur.nextSibling
+        cur.nextElementSibling
+        cur.previousSibling
+        cur.prevElementSibling
+
+    create new element and append
+        newEle = document.createElement(p);//<p></p>
+        newEle = "hello!";//<p>Helo</p>
+    case 1 : oldEle.document.body.appendChild(p); 
+    case 2 : body.append(newEle) or body.prepend(newEle)
+
+    adding Adjacent elements
+        -using function
+        oldEle.insertAdjacentElement('where', what);
+        where  - beforenegin,afterbegin,beforend,afterend.
+        what - newEle
+
+    Removing elements
+        remove() & removeChild()
+        ele.parentElement.removeChild(ele);
+        ele.remove();
+
+DOM events
+    onclick
+    addEventListener
+    events and this keyword
+        HTML -> button*{button clicked} and h1*5{header clicked}
+        JS
+        buttons = document.querySelectorAll('button');
+        for(let button of buttons){
+            button.addEventListener('click',() =>{
+                console.log('button clicked');
+            })
+        }
+
+        h1s = document.querySelectorAll('h1');
+        for(let h1 of h1s){
+            h1.addEventListener('click',() =>{
+                console.log('header clicked');
+            })
+        }
+
+    By using this we can reduce it as below, bcz this refers to clicked element
+        buttons = document.querySelectorAll('button');
+        for(let button of buttons){
+            console.log(this);
+            this.addEventListener('click', clickListener)
+        }
+
+        h1s = document.querySelectorAll('h1');
+        for(let h1 of h1s){
+            console.log(this);
+            this.addEventListener('click', clickListener)
+        }
+
+        function clickListener() {
+            console.log(this);
+            this.style.backgroundColor = rgb(122,112,222);
+        }
+
+    Keyboard events and event object analysis
+        const input = document.querySelector('input');
+        input.addEventListener('keyup',function() {
+            console.log('KEYUP!');
+        })
+
+        input.addEventListener('keydown',function() {
+            console.log('KEYDOWN!');
+        })
+    Form event and prevent default
+        const form = document.querySelector('form');
+        form.addEventListener('submit',function(e){
+            e.preventDefault();
+            let productInput = form.elements.product;
+            let quantityInput = form.elements.qty;
+            createLi(productInput,quantityInput);
+            productInput.value="";
+            quantityInput.value="";
+        })
+
+        function createLi(productInput, quantityInput) {
+            let ul = document.querySelector('ul');
+            let li = document.createElement('li');
+            li.append(`${quantityInput.value} ${productInput.value}`);
+            ul.appendChild(li);
+        }
+
+    input and change events
+        let input = document.querySelector('input');
+        input.addEventListener('input',function() {
+            console.log('each character entered);
+        })    
+        input.addEventListener('change',function() {
+            console.log('when you click outside);
+        })
+
+    Event bubbling and e.stopPropagation()
+        <section onclick="alert('section clicked')">section here
+            <p onclick="alert('paragraph clicked')">paragraph here
+                <button onclick="alert('button clicked')">button here</button>
+            </p>
+        </section>
+    The event bubbles from child to parent element
+    to avoid this we can you e.stopPropagation()
+
+    Event Delegation / to check whether the listiening event on crct element or not
+
+    HTML
+    <body>
+        <input type="enter name">
+        <button>submit</button>
+        <ul>
+            <li>initial li1</li>
+            <li>initial li2</li>
+        </ul>
+        <p>dont delete me, im not li, I am paragraph</p>
+        <script src="app.js"></script>
+    </body>
+    JS
+    let input = document.querySelector('input');
+    let button = document.querySelector('button');
+    let ul = document.querySelector('ul');
+    button.addEventListener('click', function(){
+        let li = document.createElement('li');
+        li.append(input.value);
+        ul.appendChild(li);
+        input.value="";
+    })
+    //The clickmevent will only on work manually added lis in HTML but not on dynamically added
+    // let lis = document.querySelectorAll('li');
+    // for(let li of lis) {
+    //     li.addEventListener('click', function(e){
+    //         li.remove();
+    //     })
+    // }
+    //To remove dynamically added lis we need to listen to parent element
+    ul.addEventListener('click',function(e) {
+        //console.log('click on ul');
+        //console.dir(e);
+        //to varify whether the clicked element is LI or not. we can check nodeName
+        e.target.remove() && e.target.nodeName === 'LI';
+    })
+
+Async JS
+    CALL STACK[stack trace in JAVA]
+        The mechanism in which the JS interpretator uses to keep track of its place in a 
+        script that calls multiple functions.
+        How JS 'know' which function is currently running and which all other function had been called from that function.
+        the tracking will be LIPO in call stack.
+        Once done with excution interpratator will take of that function trace from call stack.
+    ex:
+    Analyse the call stack section in chrom debbugger.
+        // let multiply = function(x,y){
+        //     returns x*y;
+        // };
+        let multiply  = (x,y)=> x*x;
+
+        let square = (x,y)=> multiply(x,y);
+
+        let rightAngleTriangle = (x,y,z)=> {
+            console.log(square(x) + square(y) === square(z));
+        }
+
+        rightAngleTriangle(3,4,5);
+
+WEB APIs and single threaded - why promises, asyc etc all these ,atters in JS not in other languages???
+    Because JS IS SINGLE THREADED!!!
+        thats means - at a given point time, a single threaded js can execute at most one line of JS code.
+    what happenes whe something take long time in JS i.e huge db data object..?
+        JS will handover some tasks to BROWSER that other languagescant do.
+        The browers comes with webapis that can perform some background tasks like request or set timeout etc..
+        The JS call stack recognises the web API function and pass them off to the browser to take care of.
+        Once browser finishes those tasks, they return and are pushed onto JS stack as a callback.
+    demo:
+    console.log('I print first');
+    setTimeout(()=>{
+        console.log('sending request to server, i ll print after 3 sec');
+    }, 3000);
+    console.log('i print second!');
+
+    in above example JS interpretator will send this setTime() to brower and print next statment.
+    Then once browser done with execution i will say to JS a there is call back function, then JS wil run that also.
+
+JS PROMIESE
+    Why did promises?
+    ex: serachMovie('KGF',()=>{
+        //if exist do this
+    },()=>{
+        //if its not do this..go on
+    }, 3000);
+    Becaus of call back nesting and single thred nature of JS..the exection time increase and performanace of a app decreases.
+    To tackle this promises and async function comes inJS.
+    promise - its an object representing eventual completion or failure of an asynchronous operation.
+        it mainly consists of first success call function and failure call funtion on makeRequest()
+        ex
+        request = fakeReuqestPromise('someurl')
+        request
+        .them(()=>{
+            //resolves
+        })
+        .catch(()=>{
+            //rejected
+        })
+    Crete your own promise
+        new Promise((resolve,reject)=> {
+            resolve();
+        })
+        PromiseState - resolved
+        new Promise((resolve,reject)=> {
+            reject();
+        })
+        PromiseState - rejected
+        new Promise((resolve,reject)=> {
+        })
+        PromiseState - pending
+
+    example of creating out own promise
+    let fakeRequest = (url)=>{
+            return new Promise((resolve,reject)=>{
+                const rand = Math.random();
+                setTimeout(()=> {
+                    if(rand > 0.7){
+                        resolve('Your fake data here!');
+                    }
+                    reject('Request error!')
+                    
+                },1000)
+            })
+        }
+
+        fakeRequest('god1/dog/')
+            .then((data)=>{
+                console.log("Done with request");
+                console.log('You data here: ', data);
+            })
+            .catch(()=> {
+                console.log('Oh NO!!!');
+                console.log('occured error is: ', data);
+            })
+Async keyword - makeup for promises
+    *async function are always retunr a prmise
+        This below function will return any promise
+        function hello() {
+        }
+        hello();
+        but below function will always retunr promise
+        async function hello() {
+            }
+        hello();
+    example
+        let asyncFun = async () => {
+            //if rejected
+            throw " Oh noo!!"
+            //if resolved
+            return "OLALAL";
+        }
+
+        asyncFun()
+            .then((data)=>{
+                console.log('resolved with data : ', data)
+            })
+            .catch((err)=>{
+                console.log('Got an error', err)
+            })
+await keyword
+    *await keyword make asynchronous code look a like synchonous one.
+    we can use await key inside function with ' asnc ' keyword.
+    await will pause the execution of a function, waiting for a promise to be resolved.
+Handling errod in async functions when promise is rejected - using try and catch block
+    async funcName = ()=> {
+        try{
+            let data  = await fakeReq('page1/ss);
+            console.log(data);
+        } catch(e){
+            consolo.log('Erron oaccurs" e);
+        }
+    }
 
 
 
