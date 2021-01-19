@@ -1045,6 +1045,271 @@ Handling errod in async functions when promise is rejected - using try and catch
     }
 
 
+AJAX.AJAJ and API's
+    json - lightweoght Data Interchange Standard.
+    easy to read and parse 
+    language independent
+    doble quote for name property is must!
+    JSON.parse("json obejec");
+    JSON.stringify("javscript obejct")
+API requestig using POSTMAN
+    by using api end points exposed by other companied/tools
+    but they are not
+        formatted correctly
+        we are not able to view the headers, preview, reponse, coockies etc..even though we can visualize in Chrome Dev tools.
+        But we cant be able to save request, easily modify them etc.
+
+    By using POSTMAN we can do al the above tasks.
+    best tools to test the apis that thay created also to visualize and consumes api developed by other developers.
+    we can play with an api usins this tool
+
+    POST API
+    body
+    headers
+        meta data of request and response like content-Type, Date etc
+    status code - 2xx(success), 4xx(client side), 5xx(server side)
+    query string -
+        baseurl/:q?key=value&key2=value2
+        :q = 'something you will search'
+        params
+        key1    value1
+        key2    value2
+    XHR's - XMLHttpsRequest
+        -old way of sending JS requests
+        -doesnt support prmises... so lots of call back!!!
+        -complex sysntax
+        ex : 
+            let req = new XMLHttpRequest();
+            req.onload = function() {
+                console.log('your response here');
+                let data = JSON.parse(this.responseText);
+                console.log(data);
+            }
+            req.onerror = function() {
+                console.log('Error!');
+            }
+            req.open('GET', 'https://api.cryptonator.com/api/ticker/btc-usd');
+            req.send();
+
+    Fetch API
+        -newer way of making requests via JS.
+        -supports pormises.
+        -doeasnot suport IE.
+        ex:
+            fetch('https://api.cryptonator.com/api/ticker/btc-usd')//type in console. i will return promise
+            .then((res)=>{
+                console.log('Your response is with only resolution header here', res);
+                return  res.json();
+            })
+            //at this point fetch will get set of headers with resolved, but it ll not wait for the data.
+            //the annoying thing about fr=etch api is that in then() we dont actually get data, we only get promise with status.
+            //sp we need to listen another .then() to fetch the data and display it
+            //to get data we need to use diff function know as '.json()
+            .then((data)=> {
+                console.log('your parsed data by .json()', data);
+            
+            })
+            .catch((err)=> {
+                console.log('Oops error occurred', err);
+            })
+
+        //using async and await
+            const fetchPriceValue = async () => {
+                const res = await fetch('https://api.cryptonator.com/api/ticker/btc-usd');
+                const data = await res.json();
+                console.log(data.ticker.price);
+            }
+            fetchPriceValue();
+
+        
+        //using async and await with try catch
+            const fetchPriceValue = async () => {
+                try {
+                    const res = await fetch('https://api.cryptonator.com/api/ticker/btc-usd');
+                    const data = await res.json();
+                    console.log(data.ticker.price);
+                } catch((e)=> {
+                    console.log('Error occured',e);
+                })
+            }
+            fetchPriceValue();
+
+Axios library - over fetch API 
+    -a library for making http requests
+    -makes a single instead of two step one for headers and one for data till parse the whole body.
+    -return promise with data too.
+        ex : axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+    //using axios to get data
+        axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+        .then((data)=> {
+            console.log('your parsed data by', data);
+        
+        })
+        .catch((err)=> {
+            console.log('Oops error occurred', err);
+        })
+
+    //using async await try and catch
+        const fetchPriceValue = async () => {
+        try {
+                const res = await axios.get('https://api.crysptonator.com/api/ticker/btc-usd');
+                console.log(res.data.ticker.price);
+        } catch(e) {
+                console.log("error", e);
+        }
+        }
+        fetchPriceValue();
+
+    setting headers using axios for getDadJoke api(https://icanhazdadjoke.com/)
+        -without header we will get HTML/textconst getDadJoke = async () => {
+            const res = await axios.get('https://icanhazdadjoke.com/');
+                console.log(res);
+            }
+            getDadJoke();
+
+        -with header as parameter configuration
+        const getDadJoke = async () => {
+            const config = {
+                    headers : {
+                        Accept : 'application/json'
+                    }
+                }
+            const res = await axios.get('https://icanhazdadjoke.com/', config);
+            console.log(res);
+        }
+
+        getDadJoke();
+        //output lookd like json
+            data:
+            id: "9hyAsrzAItc"
+            joke: "Where’s the bin? Dad: I haven’t been anywhere!"
+            status: 200
+        //headers we can see our headerheaders:
+            cache-control: "max-age=0, must-revalidate, no-cache, no-store, public, s-maxage=0"
+            content-type: "application/json"
+        //we can extract joke console.log(res.data.joke); do DOM manipulation like when we click on button display a joke
+            without refeshing page i.e its all happening behind the scenes
+            JS
+                const button = document.querySelector('button');
+                const ul = document.querySelector('ul');
+                const getDadJoke = async () => {
+                    const config = {
+                            headers : {
+                                Accept : 'application/json'
+                            }
+                        }
+                    const res = await axios.get('https://icanhazdadjoke.com/', config);
+                    const newLi = document.createElement('li');
+                    newLi.append(res.data.joke);
+                    ul.append(newLi);
+                }
+                //getDadJoke();
+                button.addEventListener('click',getDadJoke);
+            HTML
+            <button></button>
+            <ul></ul>
+
+PROTOTYPES, CLASSES, AND OOP
+    1.Prototype property(__proto__)
+        template objects, they conatiains bunch of methods, where can create multple objects that share the same prototy.
+        without having there own copy.
+            ex: let arr = [1,2,3];
+                    arr.sing = function() {
+
+                    }
+                    o/p will ahve sing funtion but not push, the push function is defined inside the _proto__
+        To see which function area 
+            Array.prototy
+            String.Prototype
+    Note :  we can add our own function to prototype.
+    ex 
+        String.prototype.imam = ()=> alert("imam")
+        ()=> alert("imam")
+        String.prototype.imam
+        ()=> alert("imam")
+        String.prototype
+        String {"", imam: ƒ, constructor: ƒ, anchor: ƒ, big: ƒ, …}imam: ()=> alert("imam")anchor: ƒ anchor()big: ƒ big()blink: ƒ blink()bold: ƒ bold()charAt: ƒ charAt()charCodeAt: ƒ charCodeAt()codePointAt: ƒ codePointAt()concat: ƒ concat()constructor: ƒ String()endsWith: ƒ endsWith()fixed: ƒ fixed()fontcolor: ƒ fontcolor()fontsize: ƒ fontsize()includes: ƒ includes()indexOf: ƒ indexOf()italics: ƒ italics()lastIndexOf: ƒ lastIndexOf()length: 0link: ƒ link()localeCompare: ƒ localeCompare()match: ƒ match()matchAll: ƒ matchAll()normalize: ƒ normalize()padEnd: ƒ padEnd()padStart: ƒ padStart()repeat: ƒ repeat()replace: ƒ replace()replaceAll: ƒ replaceAll()search: ƒ search()slice: ƒ slice()small: ƒ small()split: ƒ split()startsWith: ƒ startsWith()strike: ƒ strike()sub: ƒ sub()substr: ƒ substr()substring: ƒ substring()sup: ƒ sup()toLocaleLowerCase: ƒ toLocaleLowerCase()toLocaleUpperCase: ƒ toLocaleUpperCase()toLowerCase: ƒ toLowerCase()toString: ƒ toString()toUpperCase: ƒ toUpperCase()trim: ƒ trim()trimEnd: ƒ trimEnd()trimLeft: ƒ trimStart()trimRight: ƒ trimEnd()trimStart: ƒ trimStart()valueOf: ƒ valueOf()Symbol(Symbol.iterator): ƒ [Symbol.iterator]()__proto__: Object[[PrimitiveValue]]: ""
+        let test = "red";
+        undefined
+        test.imam()
+    *if we want we can ovveride prototype methods
+    __proto__ -> is reference on that object you have created
+    Prototype ->actual prototype object
+    Factory Functions 
+        - creating factory function, by adding 3 unique prop and 2 functions
+        - but we will not folow this fashion now in JS.
+    Constructor functions(new keyword)
+        - it will ad the functions to prototype
+        - more efficient than factrory methods
+    OOPS/Java script classes 
+        -Better than constructor function with new keyword.
+        -inside class the constructor will be invoke as soon as instance/object gets created.
+        ex: 
+        class Color {
+            constructor(){
+                console.log("constructor called");
+            }
+        }
+        const c1 = new Color();
+        -methods are added to protypes automatically(no seperated constructor function and add my methods)
+    INHERITANCE/extends and super Keywords
+    //redundant code without inheritance
+        class Cat{
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+            eat() {
+                return `${this.name} is eating;`
+            }
+            meow() {
+                return 'MEOW';
+            }
+        }
+
+        class Dog{
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+            eat() {
+                return `${this.name} is eating;`
+            }
+            bark() {
+                return "BOWW";
+            }
+        }
+    //with inheritance the same code can written as
+        class Cat extends Pet{
+            //if i have additional information which is needs to initialize, then we ca only initialize that prop, 
+            //rest all can send to parent constructor function using super() function
+            constructor(name, age, livesLeft) {
+                super(name,age);
+                console.log('In Cat constructor');
+                this.livesLeft = livesLeft;
+            }
+            meow() {
+                return 'MEOW';
+            }
+            // eat() {
+            //     return `local ${this.name} is eating;`
+            // }
+        }
+
+        class Dog extends Pet{
+            bark() {
+                return "BOWW";
+            }
+            // eat() {
+            //     return `local ${this.name} is eating;`
+            // }
+        }
+
+
+
+
+
+
 
 
 
